@@ -1,0 +1,17 @@
+#!/bin/bash
+# NEXUS-SMI — Inspiré de NVIDIA-SMI, version Nexus
+echo "=== NEXUS-SMI ==="
+echo "Date : $(date)"
+echo ""
+echo "GPU :"
+if command -v lspci >/dev/null 2>&1; then
+    lspci | grep -i nvidia
+else
+    echo "  Pas de détection NVIDIA"
+fi
+echo ""
+echo "Mémoire GPU :"
+free -h | grep Mem
+echo ""
+echo "Processus :"
+ps aux | grep -E 'nvidia|kitty|cinnamon' | grep -v grep | head -5
