@@ -16,3 +16,80 @@ bin-release/
 # Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
 # should NOT be excluded as they contain compiler settings and other important
 # information for Eclipse / Flash Builder.
+# ============================================
+# NEXUS NVIDIA - Gitignore
+# ============================================
+
+# ── Archives de distribution (déjà versionnées) ──
+*.tar.lzma
+
+# ── Fichiers extraits (non versionnés) ──
+cudnn-frontend/
+cutlass/
+dali/
+nccl/
+nexus_hook_supreme/
+rapids-cudf/
+tensorrt/
+triton-inference-server/
+
+# ── Python ──
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+ENV/
+env/
+.venv/
+.env
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# ── IDE et éditeurs ──
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# ── Logs et données temporaires ──
+*.log
+logs/
+tmp/
+.temp/
+
+# ── Config locaux (ne jamais partager) ──
+*.env
+config.local.yaml
+secrets.json
+credentials.*
+*.key
+*.pem
+
+# ── Output et artefacts de build ──
+dist/
+build/
+*.egg-info/
+
+# ── Journal de copie et suivi système ──
+copy_progress.log
+transfer_state.json
+hdd_sync_*
+
+# ── Vérifications et calculs ──
+checksums.md5
+sha256sum.txt
+verify_report.txt
+integrity_check.log
+
+# ── Cache et métadonnées NFS/Système de fichiers ──
+.nfs*
+.nv
+.cache/nvidia/
+nv_compilers/
