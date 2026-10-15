@@ -1,0 +1,62 @@
+
+name: Python Package using Conda
+
+on:
+  push:
+    branches: [main, master, develop]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        python-version: ["3.10", "3.11"]
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Les archives *.tar.lzma sont volumineuses et inutiles en CI
+          lfs: false
+          fetch-depth: 1
+
+      - name: Setup Miniconda
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+          environment-file: environment.yml
+          activate-environment: nexus-nvidia
+          auto-activate-base: false
+          channels: conda-forge,defaults
+          channel-priority: strict
+
+      - name: Show environment info
+        shell: bash -el {0}
+        run: |
+          conda info
+          conda list
+
+      - name: Install package (editable)
+        shell: bash -el {0}
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+
+      - name: Lint with flake8
+        shell: bash -el {0}
+        run: |
+          conda install -y flake8
+          # Échec immédiat sur erreurs de syntaxe ou noms non définis
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          # Le reste en avertissements seulement
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+      - name: Test with pytest
+        shell: bash -el {0}
+        run: |
+          conda install -y pytest
+          pytest -v --tb=short
